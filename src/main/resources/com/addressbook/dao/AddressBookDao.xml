@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.addressbook.dao.AddressBookDao">
+    <insert id="register">
+        insert into user (username, password) values (#{person.username}, #{person.password});
+    </insert>
+    <insert id="insertAddressBook">
+        insert into addressbook (username, sex, phone, home, address, birthday, userGroup, email, company, nickname, notes)
+        values (#{addressBook.username}, #{addressBook.sex}, #{addressBook.phone}, #{addressBook.home}, #{addressBook.address},
+                #{addressBook.birthday}, #{addressBook.userGroup}, #{addressBook.email}, #{addressBook.company}, #{addressBook.nickname},
+                #{addressBook.notes});
+    </insert>
+    <update id="updateAddressBook">
+        update addressbook set  username= #{addressBook.username}, sex=#{addressBook.sex}, phone=#{addressBook.phone}, home=#{addressBook.home},
+         address=#{addressBook.address}, birthday=#{addressBook.birthday}, userGroup=#{addressBook.userGroup}, email= #{addressBook.email}, company=#{addressBook.company},
+         nickname=#{addressBook.nickname}, notes=#{addressBook.notes} where username = #{addressBook.username};
+    </update>
+    <delete id="deleteAddressBookByName">
+        delete from addressbook where username = #{username} and phone = #{phone}
+    </delete>
+
+
+    <select id="isExistUsername" resultType="com.addressbook.bean.Person">
+        select * from user where username = #{username};
+    </select>
+    <select id="login" resultType="com.addressbook.bean.Person">
+        select * from user where username = #{person.username} and password = #{person.password};
+    </select>
+
+    <select id="queryAllAddressBook" resultType="com.addressbook.bean.AddressBook">
+        select * from addressbook
+    </select>
+    <select id="queryAllPerson" resultType="com.addressbook.bean.Person">
+        select * from user
+    </select>
+    <select id="queryAddressBookByName" resultType="com.addressbook.bean.AddressBook">
+        select * from addressbook where username = #{name}
+    </select>
+
+</mapper>
