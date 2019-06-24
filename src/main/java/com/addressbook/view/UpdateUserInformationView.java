@@ -8,38 +8,51 @@ import com.addressbook.bean.AddressBook;
 import com.addressbook.service.impl.AddressBookServiceImpl;
 import com.addressbook.util.CheckUtil;
 import com.addressbook.util.ViewUtil;
+import com.mchange.v2.codegen.bean.BeangenUtils;
 import net.miginfocom.swing.MigLayout;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import javax.swing.*;
 import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Date;
 
 
 /**
  * @author xiaoyou
  */
 @SuppressWarnings("ALL")
-public class UpdatePersonInformationView extends JFrame {
-    public UpdatePersonInformationView() {
+public class UpdateUserInformationView extends JFrame {
+
+    AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+
+    public static Integer flag = 0;
+
+    public UpdateUserInformationView() {
         initComponents();
         this.setVisible(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
 
-
     private void updatePersonActionPerformed(ActionEvent e) {
+
         AddressBook addressBook = new AddressBook();
+
         packageAddressBook(addressBook);
-        AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
-        boolean b = addressBookService.updateAddressBook(addressBook);
-        if (b){
-            JOptionPane.showMessageDialog(this, "更新成功");
-            MainView.flag = 1;
-            this.setEmpty();
-        }else {
-            JOptionPane.showMessageDialog(this, "更新失败");
+
+        if (flag == 1) {
+
+            boolean b = addressBookService.updateAddressBook(addressBook);
+            if (b) {
+                JOptionPane.showMessageDialog(this, "更新成功");
+                MainView.flag = 1;
+                this.setEmpty();
+            } else {
+                JOptionPane.showMessageDialog(this, "更新失败");
+            }
+            flag = 0;
         }
 
     }
@@ -49,7 +62,7 @@ public class UpdatePersonInformationView extends JFrame {
         this.dispose();
     }
 
-    private void setEmpty(){
+    private void setEmpty() {
         this.username.setText("");
         this.phone.setText("");
         this.home.setText("");
@@ -60,7 +73,8 @@ public class UpdatePersonInformationView extends JFrame {
         this.nickname.setText("");
     }
 
-    private void packageAddressBook(AddressBook addressBook){
+    private void packageAddressBook(AddressBook addressBook) {
+
         String username = this.username.getText().trim();
         String sex = String.valueOf(this.sex.getSelectedItem()).trim();
         String phone = this.phone.getText().trim();
@@ -73,53 +87,103 @@ public class UpdatePersonInformationView extends JFrame {
         String nickname = this.nickname.getText().trim();
         String notes = this.notes.getText().trim();
 
-        if (! CheckUtil.checkUsername(username)){
+
+        if (username == null || username.equals("")) {
+            JOptionPane.showMessageDialog(this, "姓名不能为空");
+            this.username.requestFocus();
+            return;
+        }
+
+        if (!CheckUtil.checkUsername(username)) {
             JOptionPane.showMessageDialog(this, "姓名不符合要求");
             this.username.requestFocus();
             return;
-        }else {
-            addressBook.setUsername(username);
         }
 
-        if (! CheckUtil.checkPhone(phone)){
-            JOptionPane.showMessageDialog(this,"手机号不符合要求");
+        if (!addressBookService.isExistUsername(this.username.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "用户名不存在");
+            this.username.requestFocus();
+            return;
+        }
+
+        AddressBook addressBook1 = addressBookService.findOne(this.username.getText().trim());
+
+        if (phone == null || "".equals(phone)) {
+            phone = addressBook1.getPhone();
+        }
+
+        if (home == null || "".equals(home)) {
+            home = addressBook1.getHome();
+        }
+
+        if (address == null || "".equals(address)) {
+            address = addressBook1.getAddress();
+        }
+
+        if (birthday == null || "".equals(birthday)) {
+            birthday = addressBook1.getBirthday();
+        }
+
+        if (email == null || "".equals(email)) {
+            email = addressBook1.getEmail();
+        }
+
+        if (company == null || "".equals(company)) {
+            company = addressBook1.getCompany();
+        }
+
+        if (nickname == null || "".equals(nickname)) {
+            nickname = addressBook1.getNickname();
+        }
+
+        if (notes == null || "".equals(notes)) {
+            notes = addressBook1.getNotes();
+        }
+
+        if (CheckUtil.checkPhone(phone)) {
+            addressBook.setPhone(phone);
+        } else {
+            JOptionPane.showMessageDialog(this, "手机号不符合要求");
             this.phone.requestFocus();
             return;
-        }else {
-            addressBook.setPhone(phone);
         }
 
-        if (! CheckUtil.checkHome(home)){
-            JOptionPane.showMessageDialog(this,"座机号不符合要求");
+        if (CheckUtil.checkHome(home)) {
+            addressBook.setHome(home);
+        } else {
+            JOptionPane.showMessageDialog(this, "座机号不符合要求");
             this.home.requestFocus();
             return;
-        }else {
-            addressBook.setHome(home);
         }
 
-        if (! CheckUtil.checkBirthday(birthday)){
-            JOptionPane.showMessageDialog(this,"生日格式不符合要求");
+        if (CheckUtil.checkBirthday(birthday)) {
+            addressBook.setBirthday(birthday);
+        } else {
+            JOptionPane.showMessageDialog(this, "生日格式不符合要求");
             this.birthday.requestFocus();
             return;
-        }else {
-            addressBook.setBirthday(birthday);
         }
 
-        if (! CheckUtil.checkEmail(email)){
-            JOptionPane.showMessageDialog(this,"邮箱格式不符合要求");
+        if (CheckUtil.checkEmail(email)) {
+            addressBook.setEmail(email);
+        } else {
+            JOptionPane.showMessageDialog(this, "邮箱格式不符合要求");
             this.email.requestFocus();
             return;
-        }else {
-            addressBook.setEmail(email);
         }
 
-
-        addressBook.setSex(sex);
+        addressBook.setUsername(username);
+        addressBook.setPhone(phone);
+        addressBook.setHome(home);
         addressBook.setAddress(address);
-        addressBook.setUserGroup(userGroup);
+        addressBook.setBirthday(birthday);
+        addressBook.setEmail(email);
         addressBook.setCompany(company);
         addressBook.setNickname(nickname);
         addressBook.setNotes(notes);
+        addressBook.setSex(sex);
+        addressBook.setUsergroup(userGroup);
+        flag = 1;
     }
 
     private void initComponents() {
@@ -161,29 +225,29 @@ public class UpdatePersonInformationView extends JFrame {
         //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
-            "hidemode 3",
-            // columns
-            "[29,fill]" +
-            "[70,center]" +
-            "[56,fill]" +
-            "[105,fill]" +
-            "[55,fill]" +
-            "[82,fill]" +
-            "[79,fill]",
-            // rows
-            "[49]" +
-            "[42]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[59]"));
+                "hidemode 3",
+                // columns
+                "[29,fill]" +
+                        "[70,center]" +
+                        "[56,fill]" +
+                        "[105,fill]" +
+                        "[55,fill]" +
+                        "[82,fill]" +
+                        "[79,fill]",
+                // rows
+                "[49]" +
+                        "[42]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]" +
+                        "[59]"));
 
         //---- label1 ----
         label1.setText("更新通讯录");
@@ -207,9 +271,9 @@ public class UpdatePersonInformationView extends JFrame {
         contentPane.add(label12, "cell 1 2");
 
         //---- sex ----
-        sex.setModel(new DefaultComboBoxModel<>(new String[] {
-            "\u7537",
-            "\u5973"
+        sex.setModel(new DefaultComboBoxModel<>(new String[]{
+                "\u7537",
+                "\u5973"
         }));
         sex.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 16));
         contentPane.add(sex, "cell 2 2 2 1");
@@ -259,8 +323,8 @@ public class UpdatePersonInformationView extends JFrame {
         contentPane.add(label7, "cell 1 7");
 
         //---- userGroup ----
-        userGroup.setModel(new DefaultComboBoxModel<>(new String[] {
-            ViewUtil.FAMILY,ViewUtil.FRIEND,ViewUtil.COLLEAGUE,ViewUtil.CLASSMATE,ViewUtil.IMPORTANT_PERSON,ViewUtil.OTHER
+        userGroup.setModel(new DefaultComboBoxModel<>(new String[]{
+                ViewUtil.FAMILY, ViewUtil.FRIEND, ViewUtil.COLLEAGUE, ViewUtil.CLASSMATE, ViewUtil.IMPORTANT_PERSON, ViewUtil.OTHER
         }));
         userGroup.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 16));
         contentPane.add(userGroup, "cell 2 7 2 1");
@@ -295,7 +359,7 @@ public class UpdatePersonInformationView extends JFrame {
         contentPane.add(notes, "cell 2 11 2 1");
 
         //---- updatePerson ----
-        addPerson.setText("\u6dfb\u52a0");
+        addPerson.setText("更新");
         addPerson.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 20));
         addPerson.addActionListener(e -> updatePersonActionPerformed(e));
         contentPane.add(addPerson, "cell 3 12");

@@ -15,7 +15,7 @@ public class AddressBook {
 
     private String birthday;
 
-    private String userGroup;
+    private String usergroup;
 
     private String email;
 
@@ -38,7 +38,7 @@ public class AddressBook {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
     public String getSex() {
@@ -46,7 +46,7 @@ public class AddressBook {
     }
 
     public void setSex(String sex) {
-        this.sex = sex;
+        this.sex = sex == null ? null : sex.trim();
     }
 
     public String getPhone() {
@@ -54,7 +54,7 @@ public class AddressBook {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phone == null ? null : phone.trim();
     }
 
     public String getHome() {
@@ -62,7 +62,7 @@ public class AddressBook {
     }
 
     public void setHome(String home) {
-        this.home = home;
+        this.home = home == null ? null : home.trim();
     }
 
     public String getAddress() {
@@ -70,7 +70,7 @@ public class AddressBook {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address == null ? null : address.trim();
     }
 
     public String getBirthday() {
@@ -78,15 +78,15 @@ public class AddressBook {
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.birthday = birthday == null ? null : birthday.trim();
     }
 
-    public String getUserGroup() {
-        return userGroup;
+    public String getUsergroup() {
+        return usergroup;
     }
 
-    public void setUserGroup(String userGroup) {
-        this.userGroup = userGroup;
+    public void setUsergroup(String usergroup) {
+        this.usergroup = usergroup == null ? null : usergroup.trim();
     }
 
     public String getEmail() {
@@ -94,7 +94,7 @@ public class AddressBook {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email == null ? null : email.trim();
     }
 
     public String getCompany() {
@@ -102,7 +102,7 @@ public class AddressBook {
     }
 
     public void setCompany(String company) {
-        this.company = company;
+        this.company = company == null ? null : company.trim();
     }
 
     public String getNickname() {
@@ -110,7 +110,7 @@ public class AddressBook {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname == null ? null : nickname.trim();
     }
 
     public String getNotes() {
@@ -118,6 +118,6 @@ public class AddressBook {
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = notes == null ? null : notes.trim();
     }
 }

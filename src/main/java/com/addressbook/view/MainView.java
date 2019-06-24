@@ -53,7 +53,7 @@ public class MainView extends JFrame {
     private DefaultTableModel defaultTableModel;
 
     private static String[] titles = {
-            ViewUtil.PERSON_ID, ViewUtil.PERSON_NAME,ViewUtil.PERSON_SEX, ViewUtil.PERSON_PHONE, ViewUtil.PERSON_HOME,
+            ViewUtil.PERSON_ID, ViewUtil.PERSON_NAME, ViewUtil.PERSON_SEX, ViewUtil.PERSON_PHONE, ViewUtil.PERSON_HOME,
             ViewUtil.PERSON_ADDRESS, ViewUtil.PERSON_BIRTHDAY, ViewUtil.PERSON_USER_GROUP, ViewUtil.PERSON_EMAIL,
             ViewUtil.PERSON_COMPANY, ViewUtil.PERSON_NICKNAME, ViewUtil.PERSON_NOTE};
 
@@ -61,20 +61,20 @@ public class MainView extends JFrame {
     public static int pageSize = 5;
     private Page<Object> page;
     public static int pages;
-    
+
     private AddressBookServiceImpl addressBookService;
 
     private static final int maxPages = 100;
 
     public static int flag = 0;
 
-    public MainView(){
+    public MainView() {
         this.init();
 
     }
 
 
-    private void init(){
+    private void init() {
 
         page = PageHelper.startPage(currentPageNum, pageSize);
         pages = page.getPages();
@@ -88,17 +88,17 @@ public class MainView extends JFrame {
         this.add(jPanelCenter, BorderLayout.CENTER);
         this.add(jPanelSouth, BorderLayout.SOUTH);
 
-        this.setBounds(200,200,1200,500);
+        this.setBounds(200, 200, 1200, 500);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
 
     }
 
-    private void initJpanelNorth(){
+    private void initJpanelNorth() {
         //North Panel
         jPanelNorth = new JPanel();
-        jPanelNorth.setLayout(new GridLayout(1,5));
+        jPanelNorth.setLayout(new GridLayout(1, 5));
 
         //condition
         queryCondition = new JTextField(ViewUtil.MAINVIEW_FIND_CONDITION);
@@ -121,9 +121,9 @@ public class MainView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new AddPersonInformationView().setVisible(true);
+                new AddUserInformationView().setVisible(true);
 
-                if (flag == 1){
+                if (flag == 1) {
                     jButtonLast.doClick(0);
                     flag = 0;
                 }
@@ -136,7 +136,7 @@ public class MainView extends JFrame {
         jButtonUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new UpdatePersonInformationView();
+                new UpdateUserInformationView();
             }
         });
 
@@ -146,7 +146,7 @@ public class MainView extends JFrame {
         jButtonDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new DeletePersonInformationView();
+                new DeleteUserInformationView();
             }
         });
 
@@ -158,10 +158,10 @@ public class MainView extends JFrame {
         jPanelNorth.add(jButtonDelete);
     }
 
-    private void initJpanelCenter(){
+    private void initJpanelCenter() {
         //Center Panel
         jPanelCenter = new JPanel();
-        jPanelCenter.setLayout(new GridLayout(1,1));
+        jPanelCenter.setLayout(new GridLayout(1, 1));
 
         //init table
         addressBookService = new AddressBookServiceImpl();
@@ -177,10 +177,10 @@ public class MainView extends JFrame {
         jPanelCenter.add(jScrollPane);
     }
 
-    private void initJpanelSourth(){
+    private void initJpanelSourth() {
         //south Panel
         jPanelSouth = new JPanel();
-        jPanelSouth.setLayout(new GridLayout(1,5));
+        jPanelSouth.setLayout(new GridLayout(1, 5));
         jButtonFirst = new JButton(ViewUtil.MAINVIEW_BUTTON_FIRST);
 
 
@@ -188,7 +188,6 @@ public class MainView extends JFrame {
 
 
         jButtonNext = new JButton(ViewUtil.MAINVIEW_BUTTON_NEXT);
-
 
 
         jButtonLast = new JButton(ViewUtil.MAINVIEW_BUTTON_LAST);
@@ -210,7 +209,7 @@ public class MainView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentPageNum--;
-                if (currentPageNum <= 0){
+                if (currentPageNum <= 0) {
                     currentPageNum = 1;
                 }
                 PageHelper.startPage(currentPageNum, pageSize);
@@ -225,7 +224,7 @@ public class MainView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentPageNum++;
-                if (currentPageNum >= pages){
+                if (currentPageNum >= pages) {
                     currentPageNum = pages;
                 }
 
@@ -250,7 +249,7 @@ public class MainView extends JFrame {
             }
         });
 
-        jLabelCurrentPageNum = new JLabel(ViewUtil.MAINVIEW_PAGENUM_JLABEL_DI +currentPageNum + ViewUtil.MAINVIEW_PAGENUM_JLABEL_PAGE);
+        jLabelCurrentPageNum = new JLabel(ViewUtil.MAINVIEW_PAGENUM_JLABEL_DI + currentPageNum + ViewUtil.MAINVIEW_PAGENUM_JLABEL_PAGE);
         jLabelCurrentPageNum.setHorizontalAlignment(JLabel.CENTER);
 
         jPanelSouth.add(jButtonFirst);
@@ -262,18 +261,17 @@ public class MainView extends JFrame {
 
 
     // query by name
-    private void find(){
+    private void find() {
         String queryParam = this.queryCondition.getText();
 
-        if ("".equals(queryParam) || queryParam == null){
+        if ("".equals(queryParam) || queryParam == null) {
             JOptionPane.showMessageDialog(this, "查询参数为空");
             this.queryCondition.requestFocus();
             jLabelCurrentPageNum.setText(ViewUtil.MAINVIEW_FIND_JLABEL);
             return;
         }
-
         String result[][] = addressBookService.queryAddressBookByName(queryParam);
-        if (result == null){
+        if (result == null) {
             JOptionPane.showMessageDialog(this, "查询结果为空");
         }
         this.queryCondition.setText("");
@@ -282,17 +280,19 @@ public class MainView extends JFrame {
         return;
 
     }
+
     //回车发起查询请求
-    private class FindLister extends KeyAdapter{
+    private class FindLister extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER){
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 find();
             }
         }
     }
+
     //初始化表格
-    public void initTable(JTable jTable, String[][] data){
+    public void initTable(JTable jTable, String[][] data) {
         ((DefaultTableModel) jTable.getModel()).setDataVector(data, titles);
 
         jTable.setRowHeight(30);

@@ -6,9 +6,9 @@ CREATE DATABASE addressbook;
 USE addressbook;
 
 
-DROP TABLE IF EXISTS person;
+DROP TABLE IF EXISTS user;
 
-CREATE TABLE person(
+CREATE TABLE user(
   id        INT(11) AUTO_INCREMENT,
   username  VARCHAR(255) NOT NULL ,
   password  VARCHAR(255) NOT NULL ,
@@ -27,7 +27,7 @@ CREATE TABLE addressbook(
   phone       VARCHAR(12)  UNIQUE NOT NULL ,
   home        VARCHAR(12)         DEFAULT NULL,
   address     VARCHAR(255)        DEFAULT NULL,
-  birthday    varchar(255)                DEFAULT NULL,
+  birthday    varchar(255)        DEFAULT NULL,
   userGroup   VARCHAR(255)        DEFAULT NULL,
   email       VARCHAR(255) UNIQUE DEFAULT NULL,
   company     VARCHAR(255)        DEFAULT NULL,

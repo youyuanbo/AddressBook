@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="generator" target="1.8" />
       <module name="TestAutowired" target="8" />
     </bytecodeTargetLevel>
   </component>

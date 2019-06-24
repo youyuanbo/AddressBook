@@ -8,8 +8,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.addressbook.bean.Person;
+import com.addressbook.bean.User;
 import com.addressbook.service.impl.AddressBookServiceImpl;
+import com.addressbook.service.impl.UserServiceImpl;
 import com.addressbook.util.CheckUtil;
 import net.miginfocom.swing.*;
 
@@ -20,6 +21,7 @@ import net.miginfocom.swing.*;
 public class RegisterView extends JFrame {
 
     AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+    UserServiceImpl userService = new UserServiceImpl();
 
     LoginView loginView = new LoginView();
 
@@ -44,7 +46,7 @@ public class RegisterView extends JFrame {
             return;
         }
 
-        if (addressBookService.isExistUsername(username)){
+        if (userService.isExistUsername(username)){
             JOptionPane.showMessageDialog(this, "用户名已经被注册，请重新输入");
             this.username.requestFocus();
             return;
@@ -58,11 +60,11 @@ public class RegisterView extends JFrame {
 
         //3. 封装成对象
 
-        Person person = new Person();
-        person.setUsername(username);
-        person.setPassword(password);
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
         //4. 注册
-        boolean register = addressBookService.register(person);
+        boolean register = userService.register(user);
         //5. 返回登录界面
         if (register){
             JOptionPane.showMessageDialog(this, "注册成功，将返回登录界面");

@@ -9,6 +9,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import com.addressbook.service.impl.AddressBookServiceImpl;
+import com.addressbook.util.CheckUtil;
 import net.miginfocom.swing.*;
 
 /**
@@ -16,8 +17,8 @@ import net.miginfocom.swing.*;
  */
 
 @SuppressWarnings("All")
-public class DeletePersonInformationView extends JFrame {
-    public DeletePersonInformationView() {
+public class DeleteUserInformationView extends JFrame {
+    public DeleteUserInformationView() {
         initComponents();
         this.setVisible(true);
     }
@@ -25,7 +26,46 @@ public class DeletePersonInformationView extends JFrame {
     private void deleteActionPerformed(ActionEvent e) {
         String username = this.username.getText().trim();
         String phone = this.phone.getText().trim();
+
         AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+
+        if(username == null || username.equals("")){
+            JOptionPane.showMessageDialog(this, "用户名不能为空");
+            this.username.requestFocus();
+            return;
+        }
+
+        if (!CheckUtil.checkUsername(username)){
+            JOptionPane.showMessageDialog(this, "用户名不符合要求");
+            this.username.requestFocus();
+            return;
+        }
+
+        if(phone == null || phone.equals("")){
+            JOptionPane.showMessageDialog(this, "手机号不能为空");
+            this.phone.requestFocus();
+            return;
+        }
+
+        if (!CheckUtil.checkPhone(phone)){
+            JOptionPane.showMessageDialog(this, "手机号不符合要求");
+            this.phone.requestFocus();
+            return;
+        }
+
+        if (!addressBookService.isExistUsername(username)){
+            JOptionPane.showMessageDialog(this, "用户名不存在");
+            this.phone.requestFocus();
+            return;
+        }
+
+        if (!addressBookService.isExistPhone(phone)){
+            JOptionPane.showMessageDialog(this, "手机号不存在");
+            this.phone.requestFocus();
+            return;
+        }
+
+
         boolean b = addressBookService.deleteAddressBookByName(username, phone);
         if (b){
             JOptionPane.showMessageDialog(this, "删除成功");

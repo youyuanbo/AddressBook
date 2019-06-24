@@ -21,7 +21,7 @@ public class CheckUtil {
 
     public static boolean checkPhone(String phone){
         String phoneRegex = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
-        if (phone.matches(phoneRegex)){
+        if ((phone.matches(phoneRegex)) ){
             return true;
         }
         return false;
@@ -29,7 +29,7 @@ public class CheckUtil {
 
     public static boolean checkHome(String home){
         String homeRegex = "^0\\d{2,3}-?\\d{7,8}$";
-        if (home.matches(homeRegex)){
+        if ((home.matches(homeRegex)) ){
             return true;
         }
         return false;
@@ -37,7 +37,7 @@ public class CheckUtil {
 
     public static boolean checkBirthday(String birthday){
         String birthdayRegex = "^\\d{4}-\\d{1,2}-\\d{1,2}";
-        if (birthday.matches(birthdayRegex)){
+        if (birthday.matches(birthdayRegex) ){
             return true;
         }
         return false;
@@ -45,7 +45,7 @@ public class CheckUtil {
 
     public static boolean checkEmail(String email){
         String emailRegex = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-        if (email.matches(emailRegex)){
+        if (email.matches(emailRegex) ){
             return true;
         }
         return false;

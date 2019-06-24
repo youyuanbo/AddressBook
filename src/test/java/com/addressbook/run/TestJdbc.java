@@ -1,13 +1,16 @@
 package com.addressbook.run;
 
 
-import com.addressbook.bean.Person;
 import com.addressbook.service.impl.AddressBookServiceImpl;
 import com.addressbook.util.CheckUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.junit.Test;
+import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.config.Configuration;
+import org.mybatis.generator.config.xml.ConfigurationParser;
+import org.mybatis.generator.internal.DefaultShellCallback;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestJdbc {
@@ -44,4 +47,30 @@ public class TestJdbc {
         System.out.println(CheckUtil.checkUsername("xiaoyou"));
 
     }
+
+    @Test
+    public void test03(){
+        String username = "xiaoyou";
+        AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+        String[][] strings = addressBookService.queryAddressBookByName(username);
+        for (String[] string : strings) {
+            for (String s : string) {
+                System.out.println(s);
+            }
+        }
+    }
+
+    @Test
+    public void test04() throws Exception{
+        List<String> warnings = new ArrayList<String>();
+        boolean overwrite = true;
+        File configFile = new File("E:\\workspace\\idea\\project\\AddressBook\\src\\main\\resources\\generator.xml");
+        ConfigurationParser cp = new ConfigurationParser(warnings);
+        Configuration config = cp.parseConfiguration(configFile);
+        DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+        myBatisGenerator.generate(null);
+    }
+
+
 }

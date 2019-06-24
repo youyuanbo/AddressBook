@@ -2,50 +2,25 @@
 package com.addressbook.service.impl;
 
 import com.addressbook.bean.AddressBook;
-import com.addressbook.bean.Person;
-import com.addressbook.dao.AddressBookDao;
+import com.addressbook.bean.AddressBookExample;
+import com.addressbook.dao.AddressBookMapper;
 import com.addressbook.service.AddressBookService;
 import com.addressbook.util.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
+@SuppressWarnings("all")
 public class AddressBookServiceImpl implements AddressBookService {
 
     SqlSession session = MyBatisUtil.getSession();
-    AddressBookDao addressBookDao  = session.getMapper(AddressBookDao.class);
+    AddressBookMapper addressBookMapper = session.getMapper(AddressBookMapper.class);
 
-    @Override
-    public boolean isExistUsername(String username) {
-        List<Person> users = addressBookDao.isExistUsername(username);
-        if (users.size() == 1){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean login(Person person) {
-        List<Person> users = addressBookDao.login(person);
-        if (users.size() == 1){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean register(Person person) {
-        int row = addressBookDao.register(person);
-        if (row == 1){
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public String[][] findAllAddressBook() {
 
-        List<AddressBook> addressBooks = addressBookDao.queryAllAddressBook();
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(null);
 
         int addressBooksSize = addressBooks.size();
 
@@ -65,7 +40,7 @@ public class AddressBookServiceImpl implements AddressBookService {
                     addressBooks.get(i).getHome(),
                     addressBooks.get(i).getAddress(),
                     addressBooks.get(i).getBirthday(),
-                    addressBooks.get(i).getUserGroup(),
+                    addressBooks.get(i).getUsergroup(),
                     addressBooks.get(i).getEmail(),
                     addressBooks.get(i).getCompany(),
                     addressBooks.get(i).getNickname(),
@@ -78,31 +53,31 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     @Override
-    public List<Person> queryAllPerson() {
-
-        return addressBookDao.queryAllPerson();
-    }
-
-    @Override
     public String[][] queryAddressBookByName(String name) {
-        AddressBook people = addressBookDao.queryAddressBookByName(name);
-        if (people == null){
+        
+        AddressBookExample addressBookExample = new AddressBookExample();
+        AddressBookExample.Criteria criteria = addressBookExample.createCriteria();
+        criteria.andUsernameEqualTo(name);
+        addressBookExample.or(addressBookExample.createCriteria().andPhoneEqualTo(name));
+
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(addressBookExample);
+        if (addressBooks.size() == 0){
             return null;
         }
         String data[][] = {
                 new String[]{
-                        String.valueOf(people.getId()),
-                        people.getUsername(),
-                        people.getSex(),
-                        people.getPhone(),
-                        people.getHome(),
-                        people.getAddress(),
-                        people.getBirthday(),
-                        people.getUserGroup(),
-                        people.getEmail(),
-                        people.getCompany(),
-                        people.getNickname(),
-                        people.getNotes()
+                        String.valueOf(addressBooks.get(0).getId()),
+                        addressBooks.get(0).getUsername(),
+                        addressBooks.get(0).getSex(),
+                        addressBooks.get(0).getPhone(),
+                        addressBooks.get(0).getHome(),
+                        addressBooks.get(0).getAddress(),
+                        addressBooks.get(0).getBirthday(),
+                        addressBooks.get(0).getUsergroup(),
+                        addressBooks.get(0).getEmail(),
+                        addressBooks.get(0).getCompany(),
+                        addressBooks.get(0).getNickname(),
+                        addressBooks.get(0).getNotes()
                 }
         };
 
@@ -112,7 +87,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     @Override
     public boolean insertAddressBook(AddressBook addressBook) {
 
-        int i = addressBookDao.insertAddressBook(addressBook);
+        int i = addressBookMapper.insertSelective(addressBook);
         if (i == 1){
             return true;
         }
@@ -120,25 +95,75 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     @Override
-    public boolean deleteAddressBookByName(String username, String phone) {
+    public boolean deleteAddressBookByName(String name, String phone) {
 
-        AddressBook addressBook = addressBookDao.queryAddressBookByName(username);
-        if (addressBook == null){
+        AddressBookExample example = new AddressBookExample();
+        AddressBookExample.Criteria criteria = example.createCriteria();
+        criteria.andUsernameEqualTo(name);
+        criteria.andPhoneEqualTo(phone);
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(example);
+        if (addressBooks.size() != 1){
             return false;
         }
-        int i = addressBookDao.deleteAddressBookByName(username, phone);
-        if (i == 1){
-            return true;
-        }
-        return false;
+
+        addressBookMapper.deleteByExample(example);
+        return true;
     }
 
     @Override
     public boolean updateAddressBook(AddressBook addressBook) {
-        int i = addressBookDao.updateAddressBook(addressBook);
+        AddressBookExample example = new AddressBookExample();
+        AddressBookExample.Criteria criteria = example.createCriteria();
+        criteria.andUsernameEqualTo(addressBook.getUsername());
+        int i = addressBookMapper.updateByExampleSelective(addressBook, example);
         if (i == 1) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isExistUsername(String username) {
+        AddressBookExample example = new AddressBookExample();
+        AddressBookExample.Criteria criteria = example.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(example);
+        if (addressBooks.size() == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isExistPhone(String phone) {
+        AddressBookExample example = new AddressBookExample();
+        AddressBookExample.Criteria criteria = example.createCriteria();
+        criteria.andPhoneEqualTo(phone);
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(example);
+        if (addressBooks.size() == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isExistEmail(String email) {
+        AddressBookExample example = new AddressBookExample();
+        AddressBookExample.Criteria criteria = example.createCriteria();
+        criteria.andEmailEqualTo(email);
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(example);
+        if (addressBooks.size() == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public AddressBook findOne(String username) {
+        AddressBookExample addressBookExample = new AddressBookExample();
+        AddressBookExample.Criteria criteria = addressBookExample.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<AddressBook> addressBooks = addressBookMapper.selectByExample(addressBookExample);
+        return addressBooks.get(0);
     }
 }

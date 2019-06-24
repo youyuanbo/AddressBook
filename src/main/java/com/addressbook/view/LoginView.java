@@ -8,8 +8,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.addressbook.bean.Person;
+import com.addressbook.bean.User;
 import com.addressbook.service.impl.AddressBookServiceImpl;
+import com.addressbook.service.impl.UserServiceImpl;
 import com.addressbook.util.CheckUtil;
 import net.miginfocom.swing.*;
 
@@ -20,7 +21,8 @@ import net.miginfocom.swing.*;
 @SuppressWarnings("ALL")
 public class LoginView extends JFrame {
 
-    AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+//    AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+    UserServiceImpl userService = new UserServiceImpl();
 
     public LoginView() {
         initComponents();
@@ -54,7 +56,7 @@ public class LoginView extends JFrame {
             return;
         }
 
-        if (! addressBookService.isExistUsername(Personname)){
+        if (! userService.isExistUsername(Personname)){
             JOptionPane.showMessageDialog(this, "用户名不存在，请先注册");
             this.resetActionPerformed(e);
             return;
@@ -67,11 +69,11 @@ public class LoginView extends JFrame {
             return;
         }
 
-        Person Person = new Person();
-        Person.setUsername(Personname);
-        Person.setPassword(password);
+        User user = new User();
+        user.setUsername(Personname);
+        user.setPassword(password);
 
-        if (addressBookService.login(Person)){
+        if (userService.login(user)){
             JOptionPane.showMessageDialog(this, "登录成功");
             new MainView();
             this.dispose();

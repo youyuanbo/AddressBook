@@ -11,7 +11,6 @@ import javax.swing.*;
 import com.addressbook.bean.AddressBook;
 import com.addressbook.service.impl.AddressBookServiceImpl;
 import com.addressbook.util.CheckUtil;
-import jdk.nashorn.internal.scripts.JO;
 import net.miginfocom.swing.*;
 
 
@@ -19,11 +18,11 @@ import net.miginfocom.swing.*;
  * @author xiaoyou
  */
 @SuppressWarnings("ALL")
-public class AddPersonInformationView extends JFrame {
+public class AddUserInformationView extends JFrame {
 
     public static int addFlag = 0;
 
-    public AddPersonInformationView() {
+    public AddUserInformationView() {
         initComponents();
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -35,6 +34,22 @@ public class AddPersonInformationView extends JFrame {
         packageAddressBook(addressBook);
         if (addFlag == 1){
             AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
+
+            if (addressBookService.isExistUsername(addressBook.getUsername())){
+                JOptionPane.showMessageDialog(this, "用户名已经存在");
+                return;
+            }
+
+            if (addressBookService.isExistPhone(addressBook.getPhone())){
+                JOptionPane.showMessageDialog(this, "手机号已经存在");
+                return;
+            }
+
+            if(addressBookService.isExistEmail(addressBook.getEmail())){
+                JOptionPane.showMessageDialog(this, "邮箱已经存在");
+                return;
+            }
+
             boolean b = addressBookService.insertAddressBook(addressBook);
             if (b){
                 JOptionPane.showMessageDialog(this, "添加成功");
@@ -118,7 +133,7 @@ public class AddPersonInformationView extends JFrame {
         
         addressBook.setSex(sex);
         addressBook.setAddress(address);
-        addressBook.setUserGroup(userGroup);
+        addressBook.setUsergroup(userGroup);
         addressBook.setCompany(company);
         addressBook.setNickname(nickname);
         addressBook.setNotes(notes);
