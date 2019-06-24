@@ -26,6 +26,7 @@ public class LoginView extends JFrame {
 
     public LoginView() {
         initComponents();
+        this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

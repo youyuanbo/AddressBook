@@ -23,7 +23,7 @@ import java.util.Date;
  * @author xiaoyou
  */
 @SuppressWarnings("ALL")
-public class UpdateUserInformationView extends JFrame {
+public class UpdateUserInformationView extends JDialog {
 
     AddressBookServiceImpl addressBookService = new AddressBookServiceImpl();
 
@@ -31,6 +31,8 @@ public class UpdateUserInformationView extends JFrame {
 
     public UpdateUserInformationView() {
         initComponents();
+        this.setResizable(false);
+        this.setModal(true);
         this.setVisible(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

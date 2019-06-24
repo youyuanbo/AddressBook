@@ -27,6 +27,7 @@ public class RegisterView extends JFrame {
 
     public RegisterView() {
         initComponents();
+        this.setResizable(false);
     }
 
 

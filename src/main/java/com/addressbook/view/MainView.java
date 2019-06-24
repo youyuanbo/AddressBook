@@ -88,7 +88,7 @@ public class MainView extends JFrame {
         this.add(jPanelCenter, BorderLayout.CENTER);
         this.add(jPanelSouth, BorderLayout.SOUTH);
 
-        this.setBounds(200, 200, 1200, 500);
+        this.setBounds(100, 100, 1200, 500);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);

@@ -18,12 +18,14 @@ import net.miginfocom.swing.*;
  * @author xiaoyou
  */
 @SuppressWarnings("ALL")
-public class AddUserInformationView extends JFrame {
+public class AddUserInformationView extends JDialog {
 
     public static int addFlag = 0;
 
     public AddUserInformationView() {
         initComponents();
+        this.setResizable(false);
+        this.setModal(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 

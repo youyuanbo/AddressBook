@@ -17,9 +17,11 @@ import net.miginfocom.swing.*;
  */
 
 @SuppressWarnings("All")
-public class DeleteUserInformationView extends JFrame {
+public class DeleteUserInformationView extends JDialog {
     public DeleteUserInformationView() {
         initComponents();
+        this.setModal(true);
+        this.setResizable(false);
         this.setVisible(true);
     }
 

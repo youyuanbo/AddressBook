@@ -67,23 +67,5 @@ public class ViewUtil {
     public static final String HOME_TIPS = "格式 XXX-XXXXXXX";
     public static final String BIRTHDAY_TIPS = "格式 XXXX-XX-XX";
     public static final String EMAIL_TIPS = "格式为 XXXX-XX-XX";
-    
-    
-    //Update view 
-    
-    
 
-//    public static QueryRunner getRunner() {
-//        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-//        try {
-//            dataSource.setDriverClass("com.mysql.jdbc.Driver");
-//            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/addressbook");
-//            dataSource.setUser("root");
-//            dataSource.setPassword("root");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return new QueryRunner(dataSource);
-//    }
 }
